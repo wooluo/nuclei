@@ -118,7 +118,7 @@ func New(options *types.Options) (*Runner, error) {
 	runner.customTemplates = customtemplates.ParseCustomTemplates(runner.options)
 
 	if err := runner.updateTemplates(); err != nil {
-		gologger.Error().Msgf("Could not update templates: %s\n", err)
+		gologger.Error().Msgf("不能更新扫描模板: %s\n", err)
 	}
 	if options.Headless {
 		if engine.MustDisableSandbox() {
@@ -565,7 +565,7 @@ func (r *Runner) RunEnumeration() error {
 	}
 
 	if !results.Load() {
-		gologger.Info().Msgf("No results found. Better luck next time!")
+		gologger.Info().Msgf("这次扫描未找到漏洞,大侠不要气馁，祝您下次好运!")
 	}
 	if r.browser != nil {
 		r.browser.Close()
@@ -671,26 +671,26 @@ func (r *Runner) displayExecutionInfo(store *loader.Store) {
 		builder.WriteString(" (")
 
 		if strings.Contains(config.Version, "-dev") {
-			builder.WriteString(r.colorizer.Blue("development").String())
+			builder.WriteString(r.colorizer.Blue("开发版本").String())
 		} else if config.Version == r.templatesConfig.NucleiLatestVersion {
-			builder.WriteString(r.colorizer.Green("latest").String())
+			builder.WriteString(r.colorizer.Green("最新版本").String())
 		} else {
-			builder.WriteString(r.colorizer.Red("outdated").String())
+			builder.WriteString(r.colorizer.Red("过期版本").String())
 		}
 		builder.WriteString(")")
 	}
 	messageStr := builder.String()
 	builder.Reset()
 
-	gologger.Info().Msgf("Using Nuclei Engine %s%s", config.Version, messageStr)
+	gologger.Info().Msgf("使用Nuclei引擎版本 %s%s", config.Version, messageStr)
 
 	if r.templatesConfig != nil && r.templatesConfig.NucleiTemplatesLatestVersion != "" { // TODO extract duplicated logic
 		builder.WriteString(" (")
 
 		if r.templatesConfig.TemplateVersion == r.templatesConfig.NucleiTemplatesLatestVersion {
-			builder.WriteString(r.colorizer.Green("latest").String())
+			builder.WriteString(r.colorizer.Green("最新版本").String())
 		} else {
-			builder.WriteString(r.colorizer.Red("outdated").String())
+			builder.WriteString(r.colorizer.Red("过期版本").String())
 		}
 		builder.WriteString(")")
 	}
@@ -698,17 +698,17 @@ func (r *Runner) displayExecutionInfo(store *loader.Store) {
 	builder.Reset()
 
 	if r.templatesConfig != nil {
-		gologger.Info().Msgf("Using Nuclei Templates %s%s", r.templatesConfig.TemplateVersion, messageStr)
+		gologger.Info().Msgf("使用的扫描模板版本: %s%s", r.templatesConfig.TemplateVersion, messageStr)
 	}
 	if len(store.Templates()) > 0 {
-		gologger.Info().Msgf("Templates added in last update: %d", r.countNewTemplates())
-		gologger.Info().Msgf("Templates loaded for scan: %d", len(store.Templates()))
+		gologger.Info().Msgf("上次更新中添加的模板: %d", r.countNewTemplates())
+		gologger.Info().Msgf("加载用于扫描的模板: %d", len(store.Templates()))
 	}
 	if len(store.Workflows()) > 0 {
-		gologger.Info().Msgf("Workflows loaded for scan: %d", len(store.Workflows()))
+		gologger.Info().Msgf("加载工作流用于扫描的数量: %d", len(store.Workflows()))
 	}
 	if r.hmapInputProvider.Count() > 0 {
-		gologger.Info().Msgf("Targets loaded for scan: %d", r.hmapInputProvider.Count())
+		gologger.Info().Msgf("为扫描加载的目标: %d", r.hmapInputProvider.Count())
 	}
 }
 
@@ -718,7 +718,7 @@ func (r *Runner) readNewTemplatesWithVersionFile(version string) ([]string, erro
 		return nil, err
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("version not found")
+		return nil, errors.New("版本没有找到")
 	}
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {

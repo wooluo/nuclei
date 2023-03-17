@@ -149,7 +149,7 @@ func (r *Runner) createDefaultConfig(defaultTemplatesDirectory string) error {
 
 // freshTemplateInstallation downloads the nuclei template and custom templates if new directory passed
 func (r *Runner) freshTemplateInstallation(configDir string, ctx context.Context) error {
-	gologger.Info().Msgf("nuclei-templates are not installed, installing...\n")
+	gologger.Info().Msgf("扫描模板没有发现，下载安装中...\n")
 
 	r.fetchLatestVersionsFromGithub(configDir) // also fetch the latest versions
 
@@ -163,7 +163,7 @@ func (r *Runner) freshTemplateInstallation(configDir string, ctx context.Context
 	if getErr != nil {
 		return getErr
 	}
-	gologger.Verbose().Msgf("Downloading nuclei-templates (v%s) to %s\n", version.String(), r.templatesConfig.TemplatesDirectory)
+	gologger.Verbose().Msgf("下载扫描模板 (v%s) 到 %s\n", version.String(), r.templatesConfig.TemplatesDirectory)
 
 	if _, err := r.downloadReleaseAndUnzip(ctx, version.String(), asset.GetZipballURL()); err != nil {
 		return err
@@ -173,7 +173,7 @@ func (r *Runner) freshTemplateInstallation(configDir string, ctx context.Context
 	if err := config.WriteConfiguration(r.templatesConfig); err != nil {
 		return err
 	}
-	gologger.Info().Msgf("Successfully downloaded nuclei-templates (v%s) to %s. GoodLuck!\n", version.String(), r.templatesConfig.TemplatesDirectory)
+	gologger.Info().Msgf("成功下载扫描模 (v%s) 到 %s. 网速真快!\n", version.String(), r.templatesConfig.TemplatesDirectory)
 
 	// case where -gtr flag is passed for the first time installation
 	for _, ct := range r.customTemplates {
@@ -181,6 +181,7 @@ func (r *Runner) freshTemplateInstallation(configDir string, ctx context.Context
 	}
 	return nil
 }
+
 
 func (r *Runner) updateTemplatesWithVersion(latestVersion semver.Version, currentVersion semver.Version, runner *Runner, ctx context.Context) error {
 	if latestVersion.GT(currentVersion) {
@@ -204,7 +205,7 @@ func (r *Runner) updateTemplatesWithVersion(latestVersion semver.Version, curren
 		if err := config.WriteConfiguration(runner.templatesConfig); err != nil {
 			return err
 		}
-		gologger.Info().Msgf("Successfully updated nuclei-templates (v%s) to %s. GoodLuck!\n", latestVersion.String(), r.templatesConfig.TemplatesDirectory)
+		gologger.Info().Msgf("成功更新扫描模 (v%s) 至 %s. 网速真快!\n", latestVersion.String(), r.templatesConfig.TemplatesDirectory)
 	}
 	return nil
 }
