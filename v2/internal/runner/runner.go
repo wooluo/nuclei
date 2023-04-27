@@ -583,7 +583,7 @@ func (r *Runner) RunEnumeration() error {
 	}
 
 	if !results.Load() {
-		gologger.Info().Msgf("No results found. Better luck next time!")
+		gologger.Info().Msgf("这次扫描未找到漏洞,大侠不要气馁，祝您下次好运!")
 	}
 	if r.browser != nil {
 		r.browser.Close()
@@ -686,18 +686,18 @@ func (r *Runner) displayExecutionInfo(store *loader.Store) {
 
 	cfg := config.DefaultConfig
 
-	gologger.Info().Msgf("Current nuclei version: %v %v", config.Version, updateutils.GetVersionDescription(config.Version, cfg.LatestNucleiVersion))
-	gologger.Info().Msgf("Current nuclei-templates version: %v %v", cfg.TemplateVersion, updateutils.GetVersionDescription(cfg.TemplateVersion, cfg.LatestNucleiTemplatesVersion))
+	gologger.Info().Msgf("使用Nuclei引擎版本: %v %v", config.Version, updateutils.GetVersionDescription(config.Version, cfg.LatestNucleiVersion))
+	gologger.Info().Msgf("使用的扫描模板版本: %v %v", cfg.TemplateVersion, updateutils.GetVersionDescription(cfg.TemplateVersion, cfg.LatestNucleiTemplatesVersion))
 
 	if len(store.Templates()) > 0 {
-		gologger.Info().Msgf("New templates added in latest release: %d", len(config.DefaultConfig.GetNewAdditions()))
-		gologger.Info().Msgf("Templates loaded for current scan: %d", len(store.Templates()))
+		gologger.Info().Msgf("上次更新中添加的模板: %d", len(config.DefaultConfig.GetNewAdditions()))
+		gologger.Info().Msgf("加载用于扫描的模板: %d", len(store.Templates()))
 	}
 	if len(store.Workflows()) > 0 {
-		gologger.Info().Msgf("Workflows loaded for current scan: %d", len(store.Workflows()))
+		gologger.Info().Msgf("加载工作流用于扫描的数量: %d", len(store.Workflows()))
 	}
 	if r.hmapInputProvider.Count() > 0 {
-		gologger.Info().Msgf("Targets loaded for current scan: %d", r.hmapInputProvider.Count())
+		gologger.Info().Msgf("为扫描加载的目标: %d", r.hmapInputProvider.Count())
 	}
 }
 
